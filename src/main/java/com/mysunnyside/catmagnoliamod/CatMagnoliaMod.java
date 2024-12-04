@@ -1,5 +1,9 @@
 package com.mysunnyside.catmagnoliamod;
 
+import com.mysunnyside.catmagnoliamod.block.ModBlocks;
+import com.mysunnyside.catmagnoliamod.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.neoforged.bus.EventBus;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -39,6 +43,11 @@ public class CatMagnoliaMod
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        // chama a classe que registra o evento de carregamento dos itens e blocos
+
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
@@ -54,7 +63,11 @@ public class CatMagnoliaMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.MAGNOLIASOUL);
+            event.accept(ModItems.PAPERBALL);
+        }
+        // passa as classes que criam os itens
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
